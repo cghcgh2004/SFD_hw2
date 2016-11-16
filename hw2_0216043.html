@@ -7,6 +7,7 @@
 		<style>
 			table, th, td {
 				border: 1px solid black;
+				background-color: #E0E0FF;
 			}
 			.button {
 				background-color: #E0E0FF;
@@ -25,16 +26,17 @@
 		<form name="cal">
 			<table>
 				<tr>
-					<td style="padding-top:10px; padding-bottom:10px;background-color: #E0E0FF;" colspan="6">
+					<td style="padding-top:10px; padding-bottom:10px;background-color: #E0E0FF;" colspan="7">
 						<font size="5"> Result:</font>
 						<input style="font-size:30px; width:550px;" type=text id="cnum" name="res" value="0">
 					</td>
 				</tr>
 				<tr>
+					<td></td>
+					<td></td>
 					<td><input type="button"  class="button" value="0" onclick="push('0')"></td>
-					<td><input type="button"  class="button" value="1" onclick="push('1')"></td>
-					<td><input type="button" id="btn_2" class="button" value="2" onclick="push('2')"></td>
-					<td><input type="button" id="btn_3" class="button" value="3" onclick="push('3')"></td>
+					<td><input type="button"  class="button" value="±" onclick="push('-')"></td>
+					<td></td>
 					<td><input type="button" class="button" value="+" onclick="push('+')"></td>
 					<td style="background-color: #F0F0FF;" rowspan="2">
 						<form>
@@ -46,17 +48,19 @@
 					</td>
 				</tr>
 				<tr>
+					<td><input type="button"  class="button" value="1" onclick="push('1')"></td>
+					<td><input type="button" id="btn_2" class="button" value="2" onclick="push('2')"></td>
+					<td><input type="button" id="btn_3" class="button" value="3" onclick="push('3')"></td>
 					<td><input type="button" id="btn_4" class="button" value="4" onclick="push('4')"></td>
 					<td><input type="button" id="btn_5" class="button" value="5" onclick="push('5')"></td>
-					<td><input type="button" id="btn_6" class="button" value="6" onclick="push('6')"></td>
-					<td><input type="button" id="btn_7" class="button" value="7" onclick="push('7')"></td>
 					<td><input type="button" class="button" value="-" onclick="push('-')"></td>
 				</tr>
 				<tr>
+					<td><input type="button" id="btn_6" class="button" value="6" onclick="push('6')"></td>
+					<td><input type="button" id="btn_7" class="button" value="7" onclick="push('7')"></td>
 					<td><input type="button" id="btn_8" class="button" value="8" onclick="push('8')"></td>
 					<td><input type="button" id="btn_9" class="button" value="9" onclick="push('9')"></td>
 					<td><input type="button" id="btn_A" class="button" value="A" onclick="push('A')"></td>
-					<td><input type="button" id="btn_B" class="button" value="B" onclick="push('B')"></td>
 					<td><input type="button" class="button" value="x" onclick="push('*')"></td>
 					<td style="width:250px; background-color: #F0F0FF;" rowspan="3">
 						<font size="4"> Base 10:</font>
@@ -76,18 +80,20 @@
 					</td>
 				</tr>
 				<tr>
+					<td><input type="button" id="btn_B" class="button" value="B" onclick="push('B')"></td>
 					<td><input type="button" id="btn_C" class="button" value="C" onclick="push('C')"></td>
 					<td><input type="button" id="btn_D" class="button" value="D" onclick="push('D')"></td>
 					<td><input type="button" id="btn_E" class="button" value="E" onclick="push('E')"></td>
 					<td><input type="button" id="btn_F" class="button" value="F" onclick="push('F')"></td>
 					<td><input type="button" class="button" value="/" onclick="push('/')"></td>
-				</tr>	
+				</tr>
 				<tr>
+					<td></td>
 					<td><input type="button" class="button" value="%" onclick="push('%')"></td>
-					<td><input type="button" class="button" value="=" onclick="calculate()"></td>
-					<td><input type="button" class="button" value="<---" onclick="cal.res.value+='%'"></td>
 					<td><input type="button" class="button" value="CE" onclick="cal.res.value+='%'"></td>
-					<td><input type="button" class="button" value="C" onclick="cal.res.value+='%'"></td>
+					<td><input type="button" class="button" value="C" onclick="clearAll()"></td>
+					<td><input type="button" class="button" value="←" onclick="backspace()"></td>
+					<td><input type="button" class="button" value="=" onclick="calculate()"></td>
 				</tr>
 			</table>
 			<br>
@@ -95,6 +101,8 @@
 		<script>
 			var base=10;
 			var start=0;
+			var num_start=0;
+			var neg="";
 			document.getElementById("btn_A").disabled = true;
 			document.getElementById("btn_B").disabled = true;
 			document.getElementById("btn_C").disabled = true;
@@ -104,7 +112,7 @@
 			function push(s){
 				var current = document.getElementById('cnum').value;
 				var n = parseInt(s,base);
-				if(start==0&& !isNaN(n)){
+				if(start==0&& (!isNaN(n)||s=="-")){
 					document.getElementById('cnum').value=s;
 					start=1;
 				}
@@ -112,6 +120,16 @@
 					document.getElementById('cnum').value+=s;
 					start=1;
 				}
+			}
+			function clearAll(){
+				start=0;
+				num_start=0;
+				neg="";
+				document.getElementById('cnum').value="0";
+			}
+			function backspace(){
+				var str = document.getElementById('cnum').value;
+				document.getElementById('cnum').value = str.substring(0, str.length-1);
 			}
 			function change_base(){
 				var base_n = document.getElementsByName("base"); 
@@ -223,10 +241,20 @@
 							if (n < 0){
 								n = 0xFFFF + n + 1;
 							}
+							if(neg=="-"){
+								n = 0xFFFF - n + 1;
+								neg="";
+							}
 							new_str += n.toString(16).toUpperCase();
+							num_start=1;
+						}
+						else if(num_start==0&&res[i]=="-"){
+							neg="-";
+							num_start=1;
 						}
 						else{
 							new_str += res[i];
+							num_start=0;
 						}
 					}
 					base = 16;
