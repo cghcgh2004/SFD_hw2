@@ -27,7 +27,7 @@
 				<tr>
 					<td style="padding-top:10px; padding-bottom:10px;background-color: #E0E0FF;" colspan="4">
 						<font size="5"> Result:</font>
-						<input style="font-size:30px; width:270px;" type=text id="cnum" name="res">
+						<input style="font-size:30px; width:270px;" type=text id="cnum" name="res" value="0">
 					</td>
 				</tr>
 				<tr>
@@ -50,8 +50,8 @@
 				</tr>
 				<tr>
 					<td><input type="button" class="button" value="9" onclick="cal.res.value+='9'"></td>
-					<td><input type="button" class="button" value="" onclick="cal.res.value=''"></td>
 					<td><input type="button" class="button" value="=" onclick="cal.res.value=eval(cal.res.value)"></td>
+					<td><input type="button" class="button" value="%" onclick="cal.res.value+='%'"></td>
 					<td><input type="button" class="button" value="/" onclick="cal.res.value+='/'"></td>
 				</tr>
 			</table>
