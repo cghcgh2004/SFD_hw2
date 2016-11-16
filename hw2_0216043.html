@@ -31,11 +31,11 @@
 					</td>
 				</tr>
 				<tr>
-					<td><input type="button" class="button" value="0" onclick="cal.res.value+='0'"></td>
-					<td><input type="button" class="button" value="1" onclick="cal.res.value+='1'"></td>
-					<td><input type="button" class="button" value="2" onclick="cal.res.value+='2'"></td>
-					<td><input type="button" class="button" value="3" onclick="cal.res.value+='3'"></td>
-					<td><input type="button" class="button" value="+" onclick="cal.res.value+='+'"></td>
+					<td><input type="button"  class="button" value="0" onclick="push('0')"></td>
+					<td><input type="button"  class="button" value="1" onclick="push('1')"></td>
+					<td><input type="button" id="btn_2" class="button" value="2" onclick="push('2')"></td>
+					<td><input type="button" id="btn_3" class="button" value="3" onclick="push('3')"></td>
+					<td><input type="button" class="button" value="+" onclick="push('+')"></td>
 					<td style="background-color: #F0F0FF;" rowspan="2">
 						<form>
 						<input  type="radio" name="base" value="base_10" checked = "true" onclick = "change_base()">十進位<p>
@@ -46,18 +46,18 @@
 					</td>
 				</tr>
 				<tr>
-					<td><input type="button" class="button" value="4" onclick="cal.res.value+='4'"></td>
-					<td><input type="button" class="button" value="5" onclick="cal.res.value+='5'"></td>
-					<td><input type="button" class="button" value="6" onclick="cal.res.value+='6'"></td>
-					<td><input type="button" class="button" value="7" onclick="cal.res.value+='7'"></td>
-					<td><input type="button" class="button" value="-" onclick="cal.res.value+='-'"></td>
+					<td><input type="button" id="btn_4" class="button" value="4" onclick="push('4')"></td>
+					<td><input type="button" id="btn_5" class="button" value="5" onclick="push('5')"></td>
+					<td><input type="button" id="btn_6" class="button" value="6" onclick="push('6')"></td>
+					<td><input type="button" id="btn_7" class="button" value="7" onclick="push('7')"></td>
+					<td><input type="button" class="button" value="-" onclick="push('-')"></td>
 				</tr>
 				<tr>
-					<td><input type="button" class="button" value="8" onclick="cal.res.value+='8'"></td>
-					<td><input type="button" class="button" value="9" onclick="cal.res.value+='9'"></td>
-					<td><input type="button" id="btn_A" class="button" value="A" onclick="cal.res.value+='A'"></td>
-					<td><input type="button" class="button" value="B" onclick="cal.res.value+='B'"></td>
-					<td><input type="button" class="button" value="x" onclick="cal.res.value+='*'"></td>
+					<td><input type="button" id="btn_8" class="button" value="8" onclick="push('8')"></td>
+					<td><input type="button" id="btn_9" class="button" value="9" onclick="push('9')"></td>
+					<td><input type="button" id="btn_A" class="button" value="A" onclick="push('A')"></td>
+					<td><input type="button" id="btn_B" class="button" value="B" onclick="push('B')"></td>
+					<td><input type="button" class="button" value="x" onclick="push('*')"></td>
 					<td style="width:250px; background-color: #F0F0FF;" rowspan="3">
 						<font size="4"> Base 10:</font>
 						<output style="font-size:20px" id="num"></output>
@@ -76,23 +76,43 @@
 					</td>
 				</tr>
 				<tr>
-					<td><input type="button" class="button" value="C" onclick="cal.res.value+='C'"></td>
-					<td><input type="button" class="button" value="D" onclick="cal.res.value+='D'"></td>
-					<td><input type="button" class="button" value="E" onclick="cal.res.value+='E'"></td>
-					<td><input type="button" class="button" value="F" onclick="cal.res.value+='F'"></td>
-					<td><input type="button" class="button" value="/" onclick="cal.res.value+='/'"></td>
+					<td><input type="button" id="btn_C" class="button" value="C" onclick="push('C')"></td>
+					<td><input type="button" id="btn_D" class="button" value="D" onclick="push('D')"></td>
+					<td><input type="button" id="btn_E" class="button" value="E" onclick="push('E')"></td>
+					<td><input type="button" id="btn_F" class="button" value="F" onclick="push('F')"></td>
+					<td><input type="button" class="button" value="/" onclick="push('/')"></td>
 				</tr>	
 				<tr>
-					<td><input type="button" class="button" value="%" onclick="cal.res.value+='%'"></td>
+					<td><input type="button" class="button" value="%" onclick="push('%')"></td>
 					<td><input type="button" class="button" value="=" onclick="calculate()"></td>
-					
-					
+					<td><input type="button" class="button" value="<---" onclick="cal.res.value+='%'"></td>
+					<td><input type="button" class="button" value="CE" onclick="cal.res.value+='%'"></td>
+					<td><input type="button" class="button" value="C" onclick="cal.res.value+='%'"></td>
 				</tr>
 			</table>
 			<br>
 		</form>
 		<script>
 			var base=10;
+			var start=0;
+			document.getElementById("btn_A").disabled = true;
+			document.getElementById("btn_B").disabled = true;
+			document.getElementById("btn_C").disabled = true;
+			document.getElementById("btn_D").disabled = true;
+			document.getElementById("btn_E").disabled = true;
+			document.getElementById("btn_F").disabled = true;
+			function push(s){
+				var current = document.getElementById('cnum').value;
+				var n = parseInt(s,base);
+				if(start==0&& !isNaN(n)){
+					document.getElementById('cnum').value=s;
+					start=1;
+				}
+				else{
+					document.getElementById('cnum').value+=s;
+					start=1;
+				}
+			}
 			function change_base(){
 				var base_n = document.getElementsByName("base"); 
 				var eval_str = document.getElementById('cnum').value;
@@ -120,6 +140,20 @@
 						}
 					}
 					base = 10;
+					document.getElementById("btn_2").disabled = false;
+					document.getElementById("btn_3").disabled = false;
+					document.getElementById("btn_4").disabled = false;
+					document.getElementById("btn_5").disabled = false;
+					document.getElementById("btn_6").disabled = false;
+					document.getElementById("btn_7").disabled = false;
+					document.getElementById("btn_8").disabled = false;
+					document.getElementById("btn_9").disabled = false;
+					document.getElementById("btn_A").disabled = true;
+					document.getElementById("btn_B").disabled = true;
+					document.getElementById("btn_C").disabled = true;
+					document.getElementById("btn_D").disabled = true;
+					document.getElementById("btn_E").disabled = true;
+					document.getElementById("btn_F").disabled = true;
 				}
 				else if(base_n[1].checked){
 					for(i=0;i<res.length;i++){
@@ -135,6 +169,20 @@
 						}
 					}
 					base = 2;
+					document.getElementById("btn_2").disabled = true;
+					document.getElementById("btn_3").disabled = true;
+					document.getElementById("btn_4").disabled = true;
+					document.getElementById("btn_5").disabled = true;
+					document.getElementById("btn_6").disabled = true;
+					document.getElementById("btn_7").disabled = true;
+					document.getElementById("btn_8").disabled = true;
+					document.getElementById("btn_9").disabled = true;
+					document.getElementById("btn_A").disabled = true;
+					document.getElementById("btn_B").disabled = true;
+					document.getElementById("btn_C").disabled = true;
+					document.getElementById("btn_D").disabled = true;
+					document.getElementById("btn_E").disabled = true;
+					document.getElementById("btn_F").disabled = true;
 				}
 				else if(base_n[2].checked){
 					for(i=0;i<res.length;i++){
@@ -150,6 +198,20 @@
 						}
 					}
 					base = 8;
+					document.getElementById("btn_2").disabled = false;
+					document.getElementById("btn_3").disabled = false;
+					document.getElementById("btn_4").disabled = false;
+					document.getElementById("btn_5").disabled = false;
+					document.getElementById("btn_6").disabled = false;
+					document.getElementById("btn_7").disabled = false;
+					document.getElementById("btn_8").disabled = true;
+					document.getElementById("btn_9").disabled = true;
+					document.getElementById("btn_A").disabled = true;
+					document.getElementById("btn_B").disabled = true;
+					document.getElementById("btn_C").disabled = true;
+					document.getElementById("btn_D").disabled = true;
+					document.getElementById("btn_E").disabled = true;
+					document.getElementById("btn_F").disabled = true;
 				}
 				else if(base_n[3].checked){
 					for(i=0;i<res.length;i++){
@@ -168,6 +230,20 @@
 						}
 					}
 					base = 16;
+					document.getElementById("btn_2").disabled = false;
+					document.getElementById("btn_3").disabled = false;
+					document.getElementById("btn_4").disabled = false;
+					document.getElementById("btn_5").disabled = false;
+					document.getElementById("btn_6").disabled = false;
+					document.getElementById("btn_7").disabled = false;
+					document.getElementById("btn_8").disabled = false;
+					document.getElementById("btn_9").disabled = false;
+					document.getElementById("btn_A").disabled = false;
+					document.getElementById("btn_B").disabled = false;
+					document.getElementById("btn_C").disabled = false;
+					document.getElementById("btn_D").disabled = false;
+					document.getElementById("btn_E").disabled = false;
+					document.getElementById("btn_F").disabled = false;
 				}
 				document.getElementById('cnum').value=new_str;
 			}
@@ -245,6 +321,7 @@
 				else{
 					document.getElementById('cnum').value = ans.toString(base);
 				}
+				start=0;
 			}
 		</script>
 	</body>
