@@ -25,37 +25,227 @@
 		<form name="cal">
 			<table>
 				<tr>
-					<td style="padding-top:10px; padding-bottom:10px;background-color: #E0E0FF;" colspan="4">
+					<td style="padding-top:10px; padding-bottom:10px;background-color: #E0E0FF;" colspan="6">
 						<font size="5"> Result:</font>
-						<input style="font-size:30px; width:270px;" type=text id="cnum" name="res" value="0">
+						<input style="font-size:30px; width:550px;" type=text id="cnum" name="res" value="0">
 					</td>
 				</tr>
 				<tr>
 					<td><input type="button" class="button" value="0" onclick="cal.res.value+='0'"></td>
 					<td><input type="button" class="button" value="1" onclick="cal.res.value+='1'"></td>
 					<td><input type="button" class="button" value="2" onclick="cal.res.value+='2'"></td>
+					<td><input type="button" class="button" value="3" onclick="cal.res.value+='3'"></td>
 					<td><input type="button" class="button" value="+" onclick="cal.res.value+='+'"></td>
+					<td style="background-color: #F0F0FF;" rowspan="2">
+						<form>
+						<input  type="radio" name="base" value="base_10" checked = "true" onclick = "change_base()">十進位<p>
+						<input  type="radio" name="base" value="base_2" onclick = "change_base()">二進位<p>
+						<input  type="radio" name="base" value="base_8" onclick = "change_base()">八進位<p>
+						<input  type="radio" name="base" value="base_16" onclick = "change_base()" >十六進位<p>
+						</form>
+					</td>
 				</tr>
 				<tr>
-					<td><input type="button" class="button" value="3" onclick="cal.res.value+='3'"></td>
 					<td><input type="button" class="button" value="4" onclick="cal.res.value+='4'"></td>
 					<td><input type="button" class="button" value="5" onclick="cal.res.value+='5'"></td>
+					<td><input type="button" class="button" value="6" onclick="cal.res.value+='6'"></td>
+					<td><input type="button" class="button" value="7" onclick="cal.res.value+='7'"></td>
 					<td><input type="button" class="button" value="-" onclick="cal.res.value+='-'"></td>
 				</tr>
 				<tr>
-					<td><input type="button" class="button" value="6" onclick="cal.res.value+='6'"></td>
-					<td><input type="button" class="button" value="7" onclick="cal.res.value+='7'"></td>
 					<td><input type="button" class="button" value="8" onclick="cal.res.value+='8'"></td>
+					<td><input type="button" class="button" value="9" onclick="cal.res.value+='9'"></td>
+					<td><input type="button" id="btn_A" class="button" value="A" onclick="cal.res.value+='A'"></td>
+					<td><input type="button" class="button" value="B" onclick="cal.res.value+='B'"></td>
 					<td><input type="button" class="button" value="x" onclick="cal.res.value+='*'"></td>
+					<td style="width:250px; background-color: #F0F0FF;" rowspan="3">
+						<font size="4"> Base 10:</font>
+						<output style="font-size:20px" id="num"></output>
+						<p>
+						<font size="4"> Binary:</font>
+						<output style="font-size:20px" id="bnum"></output>
+						<p>
+						<font size="4"> Octal:</font>
+						<output style="font-size:20px" id="onum"></output>
+						<p>
+						<font size="4"> Hexadecimal:</font>
+						<output style="font-size:20px" id="hnum"></output>
+						<p>
+						<p>
+						<input style="font-size:18px;" type="button" value="show in different base" onclick="showin_different_base()">
+					</td>
 				</tr>
 				<tr>
-					<td><input type="button" class="button" value="9" onclick="cal.res.value+='9'"></td>
-					<td><input type="button" class="button" value="=" onclick="cal.res.value=eval(cal.res.value)"></td>
-					<td><input type="button" class="button" value="%" onclick="cal.res.value+='%'"></td>
+					<td><input type="button" class="button" value="C" onclick="cal.res.value+='C'"></td>
+					<td><input type="button" class="button" value="D" onclick="cal.res.value+='D'"></td>
+					<td><input type="button" class="button" value="E" onclick="cal.res.value+='E'"></td>
+					<td><input type="button" class="button" value="F" onclick="cal.res.value+='F'"></td>
 					<td><input type="button" class="button" value="/" onclick="cal.res.value+='/'"></td>
+				</tr>	
+				<tr>
+					<td><input type="button" class="button" value="%" onclick="cal.res.value+='%'"></td>
+					<td><input type="button" class="button" value="=" onclick="calculate()"></td>
+					
+					
 				</tr>
 			</table>
 			<br>
 		</form>
+		<script>
+			var base=10;
+			function change_base(){
+				var base_n = document.getElementsByName("base"); 
+				var eval_str = document.getElementById('cnum').value;
+				var new_str="";
+				var i;
+				if(isNaN(eval_str)){
+					eval_str = eval_str.replace("+", " + ");
+					eval_str = eval_str.replace("-", " - ");
+					eval_str = eval_str.replace("*", " * ");
+					eval_str = eval_str.replace("/", " / ");
+					eval_str = eval_str.replace("%", " % ");
+				}
+				var res = eval_str.split(" ");
+				if(base_n[0].checked){
+					for(i=0;i<res.length;i++){
+						var n = parseInt(res[i],base);
+						if(!isNaN(n)){
+							if(base==16 && n > 0x8000){
+								n-=65536; 
+							}
+							new_str += n.toString(10);
+						}
+						else{
+							new_str += res[i];
+						}
+					}
+					base = 10;
+				}
+				else if(base_n[1].checked){
+					for(i=0;i<res.length;i++){
+						var n = parseInt(res[i],base);
+						if(!isNaN(n)){
+							if(base==16 && n > 0x8000){
+								n-=65536; 
+							}
+							new_str += n.toString(2);
+						}
+						else{
+							new_str += res[i];
+						}
+					}
+					base = 2;
+				}
+				else if(base_n[2].checked){
+					for(i=0;i<res.length;i++){
+						var n = parseInt(res[i],base);
+						if(!isNaN(n)){
+							if(base==16 && n > 0x8000){
+								n-=65536; 
+							}
+							new_str += n.toString(8);
+						}
+						else{
+							new_str += res[i];
+						}
+					}
+					base = 8;
+				}
+				else if(base_n[3].checked){
+					for(i=0;i<res.length;i++){
+						var n = parseInt(res[i],base);
+						if(!isNaN(n)){
+							if(base==16 && n > 0x8000){
+								n-=65536; 
+							}
+							if (n < 0){
+								n = 0xFFFF + n + 1;
+							}
+							new_str += n.toString(16).toUpperCase();
+						}
+						else{
+							new_str += res[i];
+						}
+					}
+					base = 16;
+				}
+				document.getElementById('cnum').value=new_str;
+			}
+			function showin_different_base() {
+				document.getElementById('num').value = "";
+				document.getElementById('bnum').value = "";
+				document.getElementById('onum').value = "";
+				document.getElementById('hnum').value = "";
+				var base_n = document.getElementsByName("base"); 
+				var eval_str = document.getElementById('cnum').value;
+				var i;
+				if(isNaN(eval_str)){
+					eval_str = eval_str.replace("+", " + ");
+					eval_str = eval_str.replace("-", " - ");
+					eval_str = eval_str.replace("*", " * ");
+					eval_str = eval_str.replace("/", " / ");
+					eval_str = eval_str.replace("%", " % ");
+				}
+				var res = eval_str.split(" ");
+				//base 10;
+				for(i=0;i<res.length;i++){
+					var n = parseInt(res[i],base);
+					if(!isNaN(n)){
+						if(base==16 && n > 0x8000){
+							n-=65536; 
+						}
+						document.getElementById('num').value += n.toString(10);
+						document.getElementById('bnum').value += n.toString(2);
+						document.getElementById('onum').value += n.toString(8);
+						if (n < 0){
+							n = 0xFFFF + n + 1;
+						}
+						document.getElementById('hnum').value += n.toString(16);
+					}
+					else{
+						document.getElementById('num').value += res[i];
+						document.getElementById('bnum').value += res[i];
+						document.getElementById('onum').value += res[i];
+						document.getElementById('hnum').value += res[i];
+					}
+				}
+			}
+			function calculate(){
+				var base_n = document.getElementsByName("base"); 
+				var eval_str = document.getElementById('cnum').value;
+				var new_str="";
+				var i;
+				if(isNaN(eval_str)){
+					eval_str = eval_str.replace("+", " + ");
+					eval_str = eval_str.replace("-", " - ");
+					eval_str = eval_str.replace("*", " * ");
+					eval_str = eval_str.replace("/", " / ");
+					eval_str = eval_str.replace("%", " % ");
+				}
+				var res = eval_str.split(" ");
+				for(i=0;i<res.length;i++){
+					var n = parseInt(res[i],base);
+					if(!isNaN(n)){
+						if(base==16 && n > 0x8000){
+							n-=65536; 
+						}
+						new_str += n.toString(10);
+					}
+					else{
+						new_str += res[i];
+					}
+				}
+				var ans= eval(new_str);
+				if(base==16){
+					if (ans < 0){
+						ans = 0xFFFF + ans + 1;
+					}
+					document.getElementById('cnum').value = ans.toString(16).toUpperCase();
+				}
+				else{
+					document.getElementById('cnum').value = ans.toString(base);
+				}
+			}
+		</script>
 	</body>
 </html>		
